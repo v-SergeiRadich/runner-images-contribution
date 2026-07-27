@@ -77,6 +77,19 @@ Function Install-VisualStudio {
         }
         New-ItemProperty -Path $vsSetupPolicyPath -Name "KeepDownloadedPayloads" -PropertyType DWord -Value 0 -Force | Out-Null
 
+        if (Test-Path -Path $vsSetupPolicyPath) {
+            $keepDownloadedPayloadsValue = (Get-ItemProperty -Path $vsSetupPolicyPath -Name "KeepDownloadedPayloads" -ErrorAction SilentlyContinue).KeepDownloadedPayloads
+            if ($keepDownloadedPayloadsValue -eq 0) {
+                Write-Host "[DEBUG] Registry policy created successfully: $vsSetupPolicyPath\KeepDownloadedPayloads = $keepDownloadedPayloadsValue"
+            }
+            else {
+                Write-Host "[DEBUG] Registry policy check failed: $vsSetupPolicyPath\KeepDownloadedPayloads value is '$keepDownloadedPayloadsValue'"
+            }
+        }
+        else {
+            Write-Host "[DEBUG] Registry policy key was not created: $vsSetupPolicyPath"
+        }
+
         $installStartTime = Get-Date
         Write-Host "Starting Install ..."
         $bootstrapperArgumentList = ('/c', $bootstrapperFilePath, '--in', $responseDataPath, $ExtraArgs, '--quiet', '--norestart', '--wait', '--nocache' )
