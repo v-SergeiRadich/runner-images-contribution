@@ -209,15 +209,6 @@ build {
   }
 
   provisioner "powershell" {
-    pause_before     = "2m0s"
-    environment_vars = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
-    scripts          = [
-      "${path.root}/../scripts/build/Install-WindowsUpdatesAfterReboot.ps1",
-      "${path.root}/../scripts/build/Invoke-Cleanup.ps1"
-    ]
-  }
-
-  provisioner "powershell" {
     environment_vars = ["IMAGE_VERSION=${var.image_version}", "IMAGE_FOLDER=${var.image_folder}"]
     inline           = ["pwsh -File '${var.image_folder}\\SoftwareReport\\Generate-SoftwareReport.ps1'"]
   }
