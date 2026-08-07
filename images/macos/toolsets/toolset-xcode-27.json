@@ -37,7 +37,7 @@
         }
     },
     "android": {
-        "cmdline-tools": "commandlinetools-mac-12266719_latest.zip",
+        "cmdline-tools": "commandlinetools-mac_arm64-15859902_latest.zip",
         "sdk-tools": "sdk-tools-darwin-4333796.zip",
         "platform_min_version": "35",
         "build_tools_min_version": "35.0.0",
