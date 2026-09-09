@@ -10,6 +10,10 @@ Describe "Docker" -Skip:(Test-IsWin11-Arm64) {
     It "docker symlink" {
         "C:\Windows\SysWOW64\docker.exe ps" | Should -ReturnZeroExitCode
     }
+
+    It "restart docker task is scheduled" {
+        Get-ScheduledTask -TaskName "RestartDocker" | Should -Not -BeNullOrEmpty
+    }
 }
 
 Describe "DockerCompose" -Skip:(Test-IsWin11-Arm64) {
