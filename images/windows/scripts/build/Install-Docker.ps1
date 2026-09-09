@@ -57,12 +57,14 @@ if (-not (Test-IsWin25-X64)) {
 }
 
 if ([version]$toolsetDockerVersion -ge [version]"29.0.0") {
+    Write-Host "Adding RestartDocker scheduled task"
     $action = New-ScheduledTaskAction -Execute"C:\post-generation\RestartDocker.ps1"
     $trigger = New-ScheduledTaskTrigger -AtStartup
     $principal = New-ScheduledTaskPrincipal -UserID "NT AUTHORITY\SYSTEM" -LogonType ServiceAccount -RunLevel Highest
     $settings = New-ScheduledTaskSettingsSet
     $task = New-ScheduledTask -Action $action -Principal $principal -Trigger $trigger -Settings $settings
-    Register-ScheduledTask -TaskName "RestartDocker" -InputObject $task
+    $result = Register-ScheduledTask -TaskName "RestartDocker" -InputObject $task
+    Write-Host "RestartDocker scheduled task added with result: $result"
 }
 
 Invoke-PesterTests -TestFile "Docker" -TestName "Docker"
