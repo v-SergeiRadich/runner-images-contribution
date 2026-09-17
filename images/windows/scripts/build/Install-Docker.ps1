@@ -56,13 +56,9 @@ if (-not (Test-IsWin25-X64)) {
     Invoke-PesterTests -TestFile "Docker" -TestName "DockerImages"
 }
 
-Write-Host "Checking Docker version for scheduled task requirement"
-Write-Host "Docker version: $toolsetVersion"
-Write-Host "Check result: $([version]$toolsetVersion -ge [version]'29.0')"
-
 if ([version]$toolsetVersion -ge [version]"29.0") {
     Write-Host "Adding RestartDocker scheduled task"
-    $action = New-ScheduledTaskAction -Execute"C:\post-generation\RestartDocker.ps1"
+    $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-ExecutionPolicy Bypass -File `\"C:\post-generation\RestartDocker.ps1`\""
     $trigger = New-ScheduledTaskTrigger -AtStartup
     $principal = New-ScheduledTaskPrincipal -UserID "NT AUTHORITY\SYSTEM" -LogonType ServiceAccount -RunLevel Highest
     $settings = New-ScheduledTaskSettingsSet
